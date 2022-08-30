@@ -1,0 +1,51 @@
+- route:
+    id: "oauth2"
+    route-configuration-id: "my-route-config"
+    from:
+      uri: "direct:oAuthService"
+      steps:
+        - set-header:
+            name: Exchange.HTTP_PATH
+            simple: "{{oauth2.token.path}}"
+        - set-header:
+            name: "camelHttpMethod"
+            simple: "POST"
+        - set-header:
+            name: "Content-Type"
+            simple: "{{oauth2.context.type}}"
+        - set-header:
+            name: "Accept"
+            simple: "application/json"
+        - set-body:
+            constant: "grant_type=client_credentials&client_id={{oauth2.client.id}}&client_secret={{oauth2.client.secret}}"
+        - to:
+            uri: "{{oauth2.server.url}}"
+        - convert-body-to:
+            type: "java.lang.String"
+            charset: "UTF8"
+        - log:
+            message: "response from API ${body}"
+            logging-level: "TRACE"
+        - choice:
+            when:
+              - simple: "${header.CamelHttpResponseCode} == 200"
+                steps:
+                  - log:
+                      message: "Body ${body}"
+                      logging-level: "TRACE"
+                  - unmarshal:
+                      json:
+                        library: "Jackson"
+                        unmarshal-type: "com.pw.camel.camelrest.model.AccessResponseToken"
+                  - set-header:
+                      name: "jwt"
+                      simple: "${body.access_token}"
+                  - log:
+                      message: "${header.jwt}"
+                      logging-level: "TRACE"
+            otherwise:
+              steps:
+                - log: "Not Authenticated!"
+        - set-header:
+            name: Exchange.HTTP_PATH
+            constant: ""

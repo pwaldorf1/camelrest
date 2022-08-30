@@ -1,0 +1,11 @@
+- route:
+    id: "yamlroute2"
+    #route-configuration-id: "my-route-config"
+    from:
+      uri: "timer:restTemplateNam2?period=10000"
+      steps:
+        - to: "rest:get:rest/hello/philip1?host=192.168.5.0:{{port}}"
+        - log: "${body}"
+        - to: "aws2-s3://pjw-test-bucket?operation=getObject&keyName=Test1.txt"
+        - log: "Received Body: ${body}"
+        - log: "File Written to S3"

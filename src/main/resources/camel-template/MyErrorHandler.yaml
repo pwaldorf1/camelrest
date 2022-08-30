@@ -1,0 +1,37 @@
+- route-configuration:
+    - id: "my-route-config"
+    - intercept-send-to-endpoint:
+        uri: "rest:*"
+        steps:
+          - log: "Hello Phil!"
+    - error-handler:
+        default-error-handler:
+          level: INFO
+          redelivery-policy:
+            retry-attempted-log-level: INFO
+            log-continued: true
+            log-exhausted: true
+            log-new-exception: true
+            log-retry-attempted: true
+            maximum-redeliveries: 2
+            redelivery-delay: 2000
+    - on-exception:
+        exception: "org.apache.http.conn.HttpHostConnectException"
+        redelivery-policy:
+          retry-attempted-log-level: INFO
+          log-continued: true
+          log-exhausted: true
+          log-new-exception: true
+          log-retry-attempted: true
+          maximum-redeliveries: 2
+          redelivery-delay: 1000
+    - on-exception:
+        exception: "org.apache.http.auth.AuthenticationException"
+        redelivery-policy:
+          retry-attempted-log-level: INFO
+          log-continued: true
+          log-exhausted: true
+          log-new-exception: true
+          log-retry-attempted: true
+          maximum-redeliveries: 2
+          redelivery-delay: 1000

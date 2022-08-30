@@ -1,0 +1,36 @@
+server:
+  port: 8085
+
+logging:
+  level:
+    root: INFO
+
+receiver:
+  endpoint: restTemplate
+
+camel:
+  springboot:
+    #main-run-controller: true
+    name: MyCamel
+    routes-include-pattern: classpath:camel-template/*,classpath:camel/*
+    tracing: true
+
+  component:
+    aws2-s3:
+      access-key: "AKIA4XQFANJ5YXTYQE5A"
+      secret-key: "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"
+      region: "us-east-1"
+
+
+port: 8083
+
+oauth2:
+  server:
+    url: http://192.168.5.1:8080
+  token:
+    path: auth/realms/TestPKCE/protocol/openid-connect/token
+  context:
+    type: application/x-www-form-urlencoded
+  client:
+    id: test-client-1
+    secret: af2da3f6-3537-49f4-b355-7d4332491bba
