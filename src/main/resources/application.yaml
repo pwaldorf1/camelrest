@@ -18,7 +18,7 @@ camel:
   component:
     aws2-s3:
       access-key: "AKIA4XQFANJ5YXTYQE5A"
-      secret-key: "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"
+      secret-key: {{secret}}
       region: "us-east-1"
 
 
