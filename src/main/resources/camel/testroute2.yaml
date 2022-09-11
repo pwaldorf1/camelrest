@@ -5,7 +5,7 @@
         - setBody:
             expression:
               simple:
-                expression: CONSTANT("Hello World!")
+                expression: CONSTANT("Hello World123!")
         - to:
             uri: log:start_log
             parameters:
